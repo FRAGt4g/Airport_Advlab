@@ -25,15 +25,13 @@ int LinkedList::add(Node *node) {
   int s = size();
 
   if (s == 0) {
-    printf("size is 0\n");
     head->nextNode = node;
   } else {
     get(s - 1)->nextNode = node;
   }
 
   node->nextNode = nullptr;
-  if (s==0) printf("finished add\n");
-  return s+1;
+  return s + 1;
 }
 
 // clear()					//Removes all elements from this
@@ -69,20 +67,13 @@ bool LinkedList::equals(LinkedList other) {
 // index in this list.
 Node *LinkedList::get(int index) {
   Node *next = head->nextNode;
-  //cout << "index: " << index << endl;
-  // printf("head is null: %i\n", head == nullptr);
-  // printf("head next node is null: %i\n", head->nextNode == nullptr);
   for (int i = 0; i < index; i++) {
-    // printf("looping through get\n");
     if (next == nullptr) {
-      //printf("empty node\n");
       return nullptr;
     }
 
     next = next->nextNode;
   }
-  //cout << "node: " << (next == nullptr) << endl;
-  //cout << "code: " << (next->data == nullptr) << endl;
   return next;
 }
 
@@ -113,9 +104,9 @@ void LinkedList::insert(int index, Node *node) {
 void LinkedList::exchg(int index1, int index2) {
   Node *node1 = get(index1);
   Node *node2 = get(index2);
-  Data *temp = node1->data;
+  Data temp = *node1->data;
   node1->data = node2->data;
-  node2->data = node1->data;
+  node2->data = &temp;
 }
 
 // swap(index1,index2)		//Swaps node located at index1 with node at
@@ -181,19 +172,19 @@ Node::Node() {
   previousNode = nullptr;
 }
 
-Node::Node(Data* d) {
+Node::Node(Data *d) {
   data = d;
   nextNode = nullptr;
   previousNode = nullptr;
 }
 
-Node::Node(Data* d, Node *nextnode) {
+Node::Node(Data *d, Node *nextnode) {
   data = d;
   nextNode = nextnode;
   previousNode = nullptr;
 }
 
-Node::Node(Data* d, Node *nextnode, Node *previousnode) {
+Node::Node(Data *d, Node *nextnode, Node *previousnode) {
   data = d;
   nextNode = nextnode;
   previousNode = previousnode;

@@ -9,6 +9,7 @@ public:
   char *code;
   double longitude;
   double latitude;
+  double distance;
 
   Data();
   Data(char *code, double longitude, double latitude);
@@ -22,9 +23,9 @@ public:
   Node *previousNode;
 
   Node();
-  Node(Data* d);
-  Node(Data* d, Node *nextNode);
-  Node(Data* d, Node *nextNode, Node *previousNode);
+  Node(Data *d);
+  Node(Data *d, Node *nextNode);
+  Node(Data *d, Node *nextNode, Node *previousNode);
   ~Node();
 };
 
@@ -41,16 +42,16 @@ public:
   void clear();
   void clearFrom(Node *n);
 
-  // equals(list)				//Returns true if the two lists contain the
-  // same elements in the same order.
+  // equals(list)				//Returns true if the two lists contain
+  // the same elements in the same order.
   bool equals(LinkedList other);
 
-  // get(index)				//Returns the element at the specified index in
-  // this list.
+  // get(index)				//Returns the element at the specified index
+  // in this list.
   Node *get(int index);
 
-  // insert(index, value)		//Inserts the element into this list before
-  // the specified index.
+  // insert(index, value)		//Inserts the element into this list
+  // before the specified index.
   void insert(int index, Node *value);
 
   // exchg(index1, index2)		//Switches the payload data of specified
@@ -65,16 +66,16 @@ public:
   // elements.
   bool isEmpty();
 
-  // remove(index)			//Removes the element at the specified index
-  // from this list.
+  // remove(index)			//Removes the element at the specified
+  // index from this list.
   void remove(int index);
 
   // set(index, value)		//Replaces the element at the specified index in
   // this list with a new value.
   void set(int index, Node *value);
 
-  // size()					//Returns the number of elements in
-  // this list.
+  // size()					//Returns the number of elements
+  // in this list.
   int size();
 
   // subList(start, length)	//Returns a new list containing elements from a

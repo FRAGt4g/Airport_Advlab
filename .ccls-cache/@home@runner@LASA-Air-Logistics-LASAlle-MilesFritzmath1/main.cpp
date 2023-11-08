@@ -15,7 +15,7 @@
 
 using namespace std;
 
-void simpleSortTotal(Data *s[], int c);
+void simpleSortTotal(LinkedList *list);
 double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d);
 
 int main() {
@@ -37,70 +37,53 @@ int main() {
       Node *n = new Node(new Data((char *)malloc(1), NAN, NAN));
       Data *info = n->data;
       infile.getline(info->code, 256, ',');
-
-      if (*info->code == '\0')
-        break;
+      cout << c << ") " << info->code << endl;
 
       infile.getline(cNum, 3000, ',');
       info->longitude = atof(cNum);
-      infile.getline(cNum, 3000, ',');
+      infile.getline(cNum, 3000, '\n');
       info->latitude = atof(cNum);
-      infile.getline(buffer, 3000);
-
-      if (c % 1000 == 2) {
-        Data *d = list.get(c - 1)->data;
-        // cout << "index in linked list: " << c << "\n\t" << d->code << " long:
-        // " << d->longitude << " lat: " << d->latitude << endl;
-      }
-
+      
       if (referenceId.compare(info->code) == 0) {
-        cout << "\n------------------\nSETTING REFERENCE\n" << "data:\n\t"<<
-        n->data->code << "\n\tLat: " << n->data->latitude << "\n\tLong: " <<
-        n->data->longitude << "\n------------------\n\n";
         reference = *new Node(n->data, n->nextNode, n->previousNode);
       }
 
-      list.add(n);
+      else {
+        list.add(n);
+      }
 
       i++;
       c++;
     }
+    cout << "out of while" << endl;
+
+    Node* n = list.get(0);
+    c = 1;
+    while(n->nextNode != nullptr) {
+      n->data->distance = distanceEarth(n->data->latitude, n->data->longitude, reference.data->latitude, reference.data->longitude); 
+      n = n->nextNode;
+      c++;
+    }
+    
+    simpleSortTotal(&list);
+    
+    n = list.get(0);
+    c = 1;
+    while(n->nextNode != nullptr) {
+      printf("%s) %f\n", n->data->code, n->data->distance);
+      n = n->nextNode;
+      c++;
+    }
+    
     airportCount = c - 1;
     infile.close();
+  } 
 
-    cout << "\n\ntest get: " << list.get(2)->data->longitude << endl;
-
-    float maxDistance = -1;
-    float farthestIndex;
-    LinkedList close = *new LinkedList();
-    for (int c = 0; c < airportCount; c++) {
-      // cout << "debug line 4" << endl;
-      Node *current = list.get(c);
-      double distance = distanceEarth(
-        reference.data->latitude, reference.data->longitude,
-        current->data->latitude, current->data->longitude
-      );
-
-      // cout << "debug line 5" << endl;
-      if (distance < 100) {
-        close.add(
-            new Node(current->data, current->nextNode, current->previousNode));
-      } else if (distance > maxDistance) {
-        maxDistance = distance;
-        farthestIndex = c;
-      }
-    }
-
-    printf("Farthest airport is %s at %.2f miles\n", list.get(farthestIndex)->data->code, maxDistance);
-    printf("List of close airports: \n");
-    for (int i = 0; i < close.size(); i++) {
-      printf("%s, ", close.get(i)->data->code);
-    }
-    cout << endl;
-
-  } else {
+  else {
     cout << "Error opening file";
   }
+
+  cout << "end of program" << endl;
 }
 
 #define pi 3.14159265358979323846
@@ -136,8 +119,42 @@ double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d) {
 /*
         Provide sort routine on linked list
 */
-/*
-void simpleSortTotal()
-{
+void simpleSortTotal(LinkedList *list) {
+  Node* next = list->get(0);
+  int c = 0;
+  
+  while (next->nextNode != nullptr) {
+    Node* sub = next;
+    int subC = 0;
+    
+    while(sub->nextNode != nullptr) {
+      if (next->data->distance < sub->data->distance) {
+        //printf("-------------------\nbefore switch\n\tnext: %s\n\tsub: %s\n", next->data->code, sub->data->code);
+        Data* t = next->data;
+        next->data = sub->data;
+        sub->data = t;
+        //printf("after switch\n\tnext: %s\n\tsub: %s\n", next->data->code, sub->data->code);
+      }
+
+      subC++;
+      sub = sub->nextNode;
+    }
+    
+    next = next->nextNode;
+    c++;
+  }
+  
+  /*
+  for (int i = 0; i < s; i++) {
+    d = list->get(i)->data;
+    for (int j = i; j < s; j++) {
+      d2 = list->get(j)->data;
+      double dis = distanceEarth(d->latitude, d->longitude, ref.latitude, ref.latitude);
+      double dis2 = distanceEarth(d2->latitude, d2->longitude, ref.latitude, ref.longitude);
+      if (dis < dis2) {
+        list->swap(i, j);
+      }
+    }
+  }
+  */
 }
-*/
